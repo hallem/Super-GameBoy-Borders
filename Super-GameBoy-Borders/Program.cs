@@ -4,8 +4,8 @@ using Super_GameBoy_Borders;
 ConsoleFileOutput output = new ConsoleFileOutput();
 Console.SetOut(output);
 
-//const string basePath = "/Users/michael/Downloads/Roms/Super GameBoy Borders/espiox_SGB_Borders";
-const string basePath = "/Users/michael/Downloads/Roms/Super GameBoy Borders/SGB Borders/Super Game Boy Borders";
+const string basePath = "/Users/michael/Downloads/Roms/Super GameBoy Borders/espiox-SGB-Borders/_THESE NEED CONVERTING TO SGB";
+//const string basePath = "/Users/michael/Downloads/Roms/Super GameBoy Borders/thewolfbunny64-sgb-borders";
 //const string convertPath = "_THESE NEED CONVERTING TO SGB";
 const string convertPath = "";
 
@@ -13,9 +13,11 @@ const string executableName = "superfamiconv_macos_x86-64_v0.10.0/superfamiconv"
 const string outPalette = "snes.palette";
 const string outTiles = "snes.tiles";
 const string outMap = "snes.map";
+const string colorZero = "00000000";
+//const string colorZero = "F8E8C8";
 //const string outTilesImage = "tiles.png";
 //const string argumentsFormat = "-v --in-image \"{0}\" --out-palette {1} --out-tiles {2} --out-map {3} --out-tiles-image {4}";
-const string argumentsFormat = "-v --in-image \"{0}\" --out-palette {1} --out-tiles {2} --out-map {3}";
+const string argumentsFormat = "-v --color-zero #{0} --in-image \"{1}\" --out-palette {2} --out-tiles {3} --out-map {4}";
 //const string argumentsFormat = "--in-image \"{0}\" --out-palette {1} --out-tiles {2} --out-map {3}";
 
 string toConvertPath = Path.Combine(basePath, convertPath);
@@ -27,7 +29,7 @@ foreach (string file in files)
     Process process = new Process();
 
     process.StartInfo.FileName = executableName;
-    process.StartInfo.Arguments = string.Format(argumentsFormat, file, outPalette, outTiles, outMap);
+    process.StartInfo.Arguments = string.Format(argumentsFormat, colorZero, file, outPalette, outTiles, outMap);
     process.StartInfo.RedirectStandardOutput = true;
     process.StartInfo.RedirectStandardError = true;
     process.Start();
@@ -100,11 +102,14 @@ foreach (string file in files)
     //File.Delete(outTilesImage);
 }
 
-Console.WriteLine("Unable to convert files:");
-
-foreach (string file in errors)
+if (errors.Count > 0)
 {
-    Console.WriteLine($"  {file}");
+    Console.WriteLine("Unable to convert files:");
+
+    foreach (string file in errors)
+    {
+        Console.WriteLine($"  {file}");
+    }
 }
 
 output.Close();
